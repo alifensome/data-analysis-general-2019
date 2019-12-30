@@ -1,8 +1,15 @@
+const {removeAllEscapedCommas} = require('./helper')
+
+
 class DataLine {
   setFromCSV(line) {
+    if (line.includes('"')) {
+      line = removeAllEscapedCommas(line)
+    }
     const splitLine = line.split(",");
-    // console.log(splitLine);
-    console.log(splitLine[0]);
+    if (splitLine.length != 17) {
+      throw new Error(`expected 17 parts but got ${splitLine.length}, LINE:${line}`)
+    }
     this.ons_id = splitLine[0];
     this.ons_region_id = splitLine[1];
     this.constituency_name = splitLine[2];
@@ -20,6 +27,30 @@ class DataLine {
     this.votes = parseInt(splitLine[14]);
     this.share = splitLine[15];
     this.change = splitLine[16];
+    // console.log(this.votes)
+    if (!this.votes) {
+      console.log("LINE:", line)
+      console.log("DATA", this)
+    }
+  }
+  setFromCandidate(can) {
+    this.ons_id = can.ons_id
+    this.ons_region_id = can.ons_region_id
+    this.constituency_name = can.constituency_name
+    this.county_name = can.county_name
+    this.region_name = can.region_name
+    this.country_name = can.country_name
+    this.constituency_type = can.constituency_type
+    this.party_name = can.party_name
+    this.party_abbreviation = can.party_abbreviation
+    this.firstname = can.firstname
+    this.surname = can.surname
+    this.gender = can.gender
+    this.sitting_mp = can.sitting_mp
+    this.former_mp = can.former_mp
+    this.votes = can.votes
+    this.share = can.share
+    this.change = can.change
   }
 }
 
